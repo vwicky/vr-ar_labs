@@ -12,4 +12,8 @@ export default {
       certDir: '/Users/.../.devServer/cert',
     }),
   ],
+  server: {
+    host: true, // This allows access from network devices
+    strictPort: true,
+  }
 }
