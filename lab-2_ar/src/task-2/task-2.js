@@ -11,7 +11,7 @@ let model;
 init();
 animate();
 
-function init() {
+async function init() {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
@@ -43,43 +43,74 @@ function init() {
     
     // Додаємо GLTF модель на сцену
     // const modelUrl = 'https://www.dropbox.com/scl/fi/o3iuwu009aiea1mdjgx58/stylized_anime_vinyl_figure_suguru_geto.glb?rlkey=rdww2pmvvf6p3qikpojvnezop&st=dtyyop8j&dl=0';
-    const modelUrl = 'stylized_anime_vinyl_figure_suguru_geto.glb' 
+    const suguruModelUrls = {
+        local: 'stylized_anime_vinyl_figure_suguru_geto.glb',
+        googleDrive: 'https://cors-anywhere.herokuapp.com/https://drive.google.com/uc?id=18Mk36K0IHuzBnaQ78qxNivAgMvd3A44w&export=download',
+        gitHubPages: 'https://github.com/vwicky/vwicky.github.io/blob/main/stylized_anime_vinyl_figure_suguru_geto.glb',
+    }
+    const shrineModelUrls = {
+        local: 'malevolent_shrine_jjk_cc.glb',
+    }
+    const satoruModelUrls = {
+        local: 'satoru_gojo.glb',
+    }
 
     // Створюємо завантажувач
     loader = new GLTFLoader();
     loader.load(
-          modelUrl,
-          function (gltf) {
-              model = gltf.scene;
-              model.position.z = -5;
-              scene.add(model);
-
-              // Створюємо матеріал для моделі (якщо потрібно)
-              const goldMaterial = new THREE.MeshStandardMaterial({
-                  color: 0xffd700, // Золотий колір
-                  metalness: 1,
-                  roughness: 0.05,
-              });
-              
-              // Змінюємо модель (якщо потрібно)
-              model.traverse((child) => {
-                  if (child.isMesh) {
-                      child.material = goldMaterial;
-                      child.material.needsUpdate = true;
-                  }
-              });
-
-              console.log("Model added to scene");
-          },
-
-          function (xhr) {
-              // console.log((xhr.loaded / xhr.total * 100) + '% loaded' );
-          },
-
-          function (error) {
-              console.error(error);
-          }
+        suguruModelUrls.local,
+        function (gltf) {
+            model = gltf.scene;
+            model.position.z = -5;
+            scene.add(model);
+            // Створюємо матеріал для моделі (якщо потрібно)
+            const goldMaterial = new THREE.MeshStandardMaterial({
+                color: 0xffd700, // Золотий колір
+                metalness: 1,
+                roughness: 0.05,
+            });
+            // Змінюємо модель (якщо потрібно)
+            model.traverse((child) => {
+                if (child.isMesh) {
+                    child.material = goldMaterial;
+                    child.material.needsUpdate = true;
+                }
+            });
+            console.log("Model added to scene");
+        },
+        function (xhr) {},
+        function (error) { console.error(error); }
     );
+    loader.load(
+        shrineModelUrls.local,
+        function (gltf) {
+            model = gltf.scene;
+            model.position.z = -5;
+            model.position.x = -3
+            model.position.y = -1
+            model.scale.set(0.4, 0.4, 0.4)
+            scene.add(model);
+
+            console.log("> shrine added to scene");
+        },
+        function (xhr) {},
+        function (error) { console.error(error); }
+    )
+    loader.load(
+        satoruModelUrls.local,
+        function (gltf) {
+            model = gltf.scene;
+            model.position.z = -2;
+            model.position.x = 1
+            model.position.y = -1
+           
+            scene.add(model);
+
+            console.log("> shrine added to scene");
+        },
+        function (xhr) {},
+        function (error) { console.error(error); }
+    )
 
     document.body.appendChild(ARButton.createButton(renderer));
 
@@ -98,7 +129,7 @@ function animate() {
 }
 
 function render() {
-    rotateModel();
+    // rotateModel();
     renderer.render(scene, camera);
 }
     
